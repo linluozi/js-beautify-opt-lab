@@ -1,0 +1,98 @@
+--- a/python/jsbeautifier/javascript/tokenizer.py
++++ b/python/jsbeautifier/javascript/tokenizer.py
+@@ -119,6 +119,31 @@
+ 
+ reserved_word_pattern = re.compile(r"^(?:" + "|".join(reserved_words) + r")$")
+ 
++# First-character dispatch: for a given starting character only one reader can
++# ever match, so the ten-way ``or`` cascade in ``_get_next_token`` can be
++# skipped.  Characters whose token can depend on tokenizer state ('/', '<',
++# '#', '-') deliberately stay on the full cascade.
++_FAST_START = {}
++for _ch in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_$0123456789":
++    _FAST_START[_ch] = "word"
++for _ch in "\"'`":
++    _FAST_START[_ch] = "string"
++for _ch in "([{}]);,":
++    _FAST_START[_ch] = "singles"
++for _ch in "+*%=!?:^&|~>":
++    _FAST_START[_ch] = "punct"
++_FAST_START["."] = "word_then_singles"
++
++# The tokenizer's whitespace class is not just \s: TokenizerPatterns below adds
++# U+00A0..U+3000 spacing characters plus U+180E and U+FEFF, and U+2028/U+2029 as
++# newlines.  Two of those (U+180E, U+FEFF) are *not* str.isspace(), so the fast
++# reject must consult this set as well.  tests/test_whitespace_predicate.py
++# checks this predicate against the compiled pattern for every BMP char.
++_EXTRA_WHITESPACE = frozenset(
++    "\u00a0\u1680\u180e\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007"
++    "\u2008\u2009\u200a\u202f\u205f\u3000\ufeff\u2028\u2029"
++)
++
+ directives_core = Directives(r"/\*", r"\*/")
+ 
+ xmlRegExp = re.compile(
+@@ -203,13 +228,41 @@
+             )
+         )
+ 
++    def _readWhitespace(self):
++        # Fast reject: whitespace.read() is only ever entered for characters
++        # the pattern can match.  str.isspace() is the same predicate CPython
++        # uses for \s, so a False answer proves the pattern cannot match here;
++        # the two counters still get the reset that read() would have done.
++        c = self._input.peek()
++        if c is not None and not (c.isspace() or c in _EXTRA_WHITESPACE):
++            whitespace = self._patterns.whitespace
++            whitespace.newline_count = 0
++            whitespace.whitespace_before_token = ""
++            return ""
++        return self._patterns.whitespace.read()
++
+     def _get_next_token(self, previous_token, open_token):
+         token = None
+         self._readWhitespace()
+ 
+         c = self._input.peek()
+         if c is None:
+-            token = self._create_token(TOKEN.EOF, "")
++            return self._create_token(TOKEN.EOF, "")
++
++        kind = _FAST_START.get(c)
++        if kind is not None:
++            if kind == "word":
++                token = self._read_word(previous_token)
++            elif kind == "string":
++                token = self._read_string(c)
++            elif kind == "singles":
++                token = self._read_singles(c)
++            elif kind == "punct":
++                token = self._read_punctuation()
++            else:
++                token = self._read_word(previous_token) or self._read_singles(c)
++            if token is not None:
++                return token
+ 
+         token = token or self._read_non_javascript(c)
+         token = token or self._read_string(c)
+@@ -269,7 +322,10 @@
+         resulting_string = self._patterns.identifier.read()
+ 
+         if bool(resulting_string):
+-            resulting_string = re.sub(self.acorn.allLineBreaks, "\n", resulting_string)
++            # Identifiers/numbers cannot contain a line terminator, so the
++            # substitution is a no-op unless one is actually present.
++            if not resulting_string.isascii() or "\n" in resulting_string or "\r" in resulting_string:
++                resulting_string = self.acorn.allLineBreaks.sub("\n", resulting_string)
+             if not (
+                 previous_token.type == TOKEN.DOT
+                 or (
+@@ -328,7 +384,7 @@
+             if self._input.peek() == c:
+                 resulting_string += self._input.next()
+ 
+-            resulting_string = re.sub(self.acorn.allLineBreaks, "\n", resulting_string)
++            resulting_string = self.acorn.allLineBreaks.sub("\n", resulting_string)
+ 
+             return self._create_token(TOKEN.STRING, resulting_string)
+ 

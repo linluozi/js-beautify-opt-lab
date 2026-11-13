@@ -1,0 +1,21 @@
+{
+  "bytes": 470363,
+  "file": "/usr/share/nodejs/undici/undici-fetch.js",
+  "impl": "baseline",
+  "per_reader": {
+    "_readWhitespace": 70206,
+    "_read_comment": 7076,
+    "_read_non_javascript": 70205,
+    "_read_pair": 67824,
+    "_read_punctuation": 6811,
+    "_read_regexp": 6856,
+    "_read_singles": 40076,
+    "_read_string": 70205,
+    "_read_word": 67824,
+    "_read_xml": 6811
+  },
+  "probes_non_whitespace": 343688,
+  "probes_per_token": 4.895,
+  "probes_total_including_whitespace": 413894,
+  "tokens": 70206
+}

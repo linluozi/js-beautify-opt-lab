@@ -1,0 +1,36 @@
+{
+  "environment": {
+    "cpu": "AMD EPYC 7K62 48-Core Processor",
+    "python": "3.12.3"
+  },
+  "real_corpus": {
+    "files_ge_16kb": 17,
+    "max": 1.2436910263031704,
+    "median": 1.1779477015028252,
+    "min": 0.9715079641037314,
+    "per_file": {
+      "/usr/share/nodejs/acorn-loose/dist/acorn-loose.js": 1.2201254519259426,
+      "/usr/share/nodejs/acorn/dist/acorn.js": 1.1950868410889939,
+      "/usr/share/nodejs/busboy/lib/types/multipart.js": 1.2112891106804855,
+      "/usr/share/nodejs/cjs-module-lexer/dist/lexer.js": 1.0839895037109877,
+      "/usr/share/nodejs/cjs-module-lexer/lexer.js": 1.160337018269959,
+      "/usr/share/nodejs/undici/lib/cache/cache.js": 1.1830470073215404,
+      "/usr/share/nodejs/undici/lib/client.js": 1.230032063007819,
+      "/usr/share/nodejs/undici/lib/fetch/body.js": 1.1595373549615233,
+      "/usr/share/nodejs/undici/lib/fetch/dataURL.js": 1.1744012120549538,
+      "/usr/share/nodejs/undici/lib/fetch/index.js": 1.1766703016217144,
+      "/usr/share/nodejs/undici/lib/fetch/request.js": 1.1613440463539277,
+      "/usr/share/nodejs/undici/lib/fetch/response.js": 1.1779477015028252,
+      "/usr/share/nodejs/undici/lib/fetch/util.js": 1.2436910263031704,
+      "/usr/share/nodejs/undici/lib/fetch/webidl.js": 1.1842331515569293,
+      "/usr/share/nodejs/undici/lib/llhttp/llhttp-wasm.js": 0.9715079641037314,
+      "/usr/share/nodejs/undici/lib/websocket/websocket.js": 1.153603921211699,
+      "/usr/share/nodejs/undici/undici-fetch.js": 1.2106902912621624
+    }
+  },
+  "speedups": {
+    "large": 1.203087929578586,
+    "medium": 1.22441454643868,
+    "small": 1.2073295278446345
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "baseline_median_s": 0.9295,
+  "full_patch_saving_s": 0.1595,
+  "hunk_alone_double_count_factor": 0.99,
+  "hunk_alone_saving_s": {
+    "dispatch": 0.1098,
+    "whitespace": -0.0014,
+    "word": 0.0502
+  },
+  "hunk_alone_sum_s": 0.1586,
+  "leave_one_out_explained_fraction": 0.9503,
+  "leave_one_out_marginal_s": {
+    "dispatch": 0.1026,
+    "whitespace": 0.0037,
+    "word": 0.0453
+  },
+  "leave_one_out_sum_s": 0.1515,
+  "output_sha256_equal": true,
+  "rows": {
+    "baseline": {
+      "median": 0.9295,
+      "saving": 0.0,
+      "speedup": 1.0
+    },
+    "full-patch": {
+      "median": 0.7701,
+      "saving_vs_baseline": 0.1595,
+      "speedup": 1.2071
+    },
+    "no-first-char-dispatch": {
+      "median": 0.8727,
+      "saving_vs_baseline": 0.0568,
+      "speedup": 1.0651
+    },
+    "no-identifier-sub-guard": {
+      "median": 0.8153,
+      "saving_vs_baseline": 0.1142,
+      "speedup": 1.1401
+    },
+    "no-whitespace-fast-reject": {
+      "median": 0.7738,
+      "saving_vs_baseline": 0.1558,
+      "speedup": 1.2013
+    },
+    "only-first-char-dispatch": {
+      "median": 0.8197,
+      "saving_vs_baseline": 0.1098,
+      "speedup": 1.1339
+    },
+    "only-identifier-sub-guard": {
+      "median": 0.8793,
+      "saving_vs_baseline": 0.0502,
+      "speedup": 1.0571
+    },
+    "only-whitespace-fast-reject": {
+      "median": 0.931,
+      "saving_vs_baseline": -0.0014,
+      "speedup": 0.9985
+    }
+  },
+  "workload": "largest real .js file under /usr/share/nodejs"
+}
