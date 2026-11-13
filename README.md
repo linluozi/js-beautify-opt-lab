@@ -11,7 +11,7 @@ Upstream: https://github.com/beautifier/js-beautify
 - 上游版本：`python/` 包，commit `4f52c492a47d1aadfeb22b5350a4784a36f736b3`（2026-07-21；
   仓库 `pushed_at` 2026-10-19），MIT。
 - 本地改动：`src/jsbeautifier/` 是打了补丁的完整包；`patch.diff` 可对干净上游 clone
-  `git apply`（已 `--check` 通过）。**60 行新增 / 4 行删除**（共 64 行变更，≤80）。
+  `git apply`（已 `--check` 通过）。**55 行新增 / 3 行删除**（共 58 行变更，≤80）。
 - 未改公共 API、未改返回值语义、未改上游测试文件。
 
 ## 改了什么
